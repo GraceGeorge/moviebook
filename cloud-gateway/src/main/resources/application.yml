@@ -1,0 +1,49 @@
+server:
+  port: 8055    #default port where the service will be started
+spring:     
+  application:
+    name: gateway-service   #current service name to be used by the eureka server
+   
+        
+  cloud:
+    gateway:
+      routes:
+      - id: USER-SERVICE 
+        uri: lb://USER-SERVICE
+        predicates:
+            - Path=/u/**
+      - id: movies-service
+        uri: lb://movies-service
+        predicates:
+            - Path=/movies/**
+      - id: theatre-service 
+        uri: lb://theatre-service
+        predicates:
+            - Path=/theatre/**
+      - id: booking-service 
+        uri: lb://booking-service/
+        predicates:
+           - Path=/booking/** 
+          
+          
+eureka:         #tells about the Eureka server details and its refresh time
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
+ 
+
+     
+management:
+  security:
+    enabled: false  #disable the spring security on the management endpoints like /env, /refresh etc. 
+ 
+logging:
+  level:
+    com.example.howtodoinjava: DEBUG
